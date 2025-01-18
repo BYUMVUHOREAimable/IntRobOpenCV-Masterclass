@@ -4,7 +4,7 @@ import numpy as np
 import re
 
 # Ensure pytesseract knows the location of Tesseract (if using Windows)
-# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 # Step 1: Read the input image
 image = cv2.imread("car1.jpg")
