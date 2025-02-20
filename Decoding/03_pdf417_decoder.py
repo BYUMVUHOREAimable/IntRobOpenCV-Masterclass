@@ -8,7 +8,8 @@ javase_jar = "javase-3.5.0.jar"
 core_jar = "core-3.5.0.jar"
 jcommander_jar = "jcommander-1.82.jar"
 
-barcode_image = "id-gabriel.png"
+barcode_image = "dl-gabriel.png"
+
 
 # Validate required files
 for file in [javase_jar, core_jar, jcommander_jar, barcode_image]:
@@ -20,7 +21,7 @@ for file in [javase_jar, core_jar, jcommander_jar, barcode_image]:
 docker_command = [
     "docker", "run", "--rm",
     "-v", f"{os.getcwd()}:/app",
-    "openjdk:17",
+    "openjdk:21",
     "java", "-cp",
     f"/app/{javase_jar}:/app/{core_jar}:/app/{jcommander_jar}",
     "com.google.zxing.client.j2se.CommandLineRunner",
