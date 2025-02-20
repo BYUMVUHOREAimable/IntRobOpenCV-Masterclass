@@ -7,7 +7,7 @@ image = cv2.imread('lena_small.jpg')
 # Rectangle coordinates: top-left (188, 188), bottom-right (376, 376)
 # Color: Green (BGR format: (0, 255, 0)), Thickness: 2 pixels
 
-cv2.rectangle(image, (188, 188), (376, 376), (0, 255, 0), 2)
+cv2.rectangle(image, (188, 188), (376, 376), (255, 0, 0), 2)
 
 # Display the image in a new window named 'Image'
 cv2.imshow('Image', image)

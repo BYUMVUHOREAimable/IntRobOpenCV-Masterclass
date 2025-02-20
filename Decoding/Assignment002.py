@@ -8,8 +8,8 @@ javase_jar = "javase-3.5.0.jar"
 core_jar = "core-3.5.0.jar"
 jcommander_jar = "jcommander-1.82.jar"
 
-barcode_image = "dl-gabriel.png"
-
+# Input barcode image (can be passed as an argument or hardcoded)
+barcode_image = "pdf417_code.png"  # Replace with your image path or use sys.argv to pass it
 
 # Validate required files
 for file in [javase_jar, core_jar, jcommander_jar, barcode_image]:
@@ -21,7 +21,7 @@ for file in [javase_jar, core_jar, jcommander_jar, barcode_image]:
 docker_command = [
     "docker", "run", "--rm",
     "-v", f"{os.getcwd()}:/app",
-    "openjdk:21",
+    "openjdk:17",
     "java", "-cp",
     f"/app/{javase_jar}:/app/{core_jar}:/app/{jcommander_jar}",
     "com.google.zxing.client.j2se.CommandLineRunner",
@@ -39,12 +39,36 @@ except subprocess.CalledProcessError as e:
     print(e.stderr)
     exit(1)
 
-# Parse the ZXing output for barcode position
+# Check if the output contains "No barcode found"
+if "No barcode found" in output:
+    print("\nError: No barcode detected in the image.")
+    print("Possible reasons:")
+    print("1. The image does not contain a valid PDF417 barcode.")
+    print("2. The barcode is not clearly visible or is distorted.")
+    print("3. The image quality is poor (e.g., blurry, low resolution, or improper lighting).")
+    print("4. The barcode is rotated or skewed.")
+    exit(1)
+
+# Parse the ZXing output for barcode position and decoded data
 points = []
+decoded_data = None
+
+# Extract decoded data
 for line in output.splitlines():
-    if line.startswith("  Point"):
+    if line.strip().startswith("Raw result:"):
+        decoded_data = line.split("Raw result:")[1].strip()
+    elif line.strip().startswith("Parsed result:"):
+        decoded_data = line.split("Parsed result:")[1].strip()
+    elif line.startswith("  Point"):
         parts = line.split(":")[1].strip().replace("(", "").replace(")", "").split(",")
         points.append((int(float(parts[0])), int(float(parts[1]))))
+
+# Print decoded data in human-readable format
+if decoded_data:
+    print("\nDecoded Information (Human Readable):")
+    print(decoded_data)
+else:
+    print("No decoded data found.")
 
 # If points are found, draw a bounding polygon
 if len(points) >= 4:
