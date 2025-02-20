@@ -1,0 +1,1 @@
+The written python script should be able to decode the image as it is without first manually manipulating it using Image Editing Apps like Photoshop, Illustrator, Paint, etc.
